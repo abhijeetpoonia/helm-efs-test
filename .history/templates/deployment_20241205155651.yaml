@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-nginx
+  labels:
+    app: {{ .Release.Name }}-nginx
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-nginx
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-nginx
+    spec:
+      containers:
+      - name: nginx
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: {{ .Values.volume.mountName }}  # Dynamically set mount name
+          mountPath: /usr/share/nginx/html
+        env:
+        {{- with .Values.envVars }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      volumes:
+      - name: {{ .Values.volume.name }}  # Dynamically set volume name
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-nginx-pvc
+      resources:
+        requests:
+          memory: {{ .Values.resources.requests.memory }}
+          cpu: {{ .Values.resources.requests.cpu }}
+        limits:
+          memory: {{ .Values.resources.limits.memory }}
+          cpu: {{ .Values.resources.limits.cpu }}

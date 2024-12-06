@@ -1,0 +1,17 @@
+{{- if .Values.certificate.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Release.Name }}-tls-certificate
+  namespace: {{ .Values.certificate.namespace | default .Release.Namespace }}
+spec:
+  secretName: {{ .Values.certificate.secretName | default (printf "%s-tls-secret" .Release.Name) }}
+  issuerRef:
+    name: {{ .Values.certificate.issuerName }}
+    kind: {{ .Values.certificate.issuerKind | default "ClusterIssuer" }}
+  commonName: {{ .Values.certificate.commonName }}
+  dnsNames:
+    {{- range .Values.certificate.dnsNames }}
+    - {{ . }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,76 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: "1.21.1"
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 80
+  nodePort: 30007
+
+persistence:
+  enabled: true
+  accessMode: ReadWriteMany
+  size: 1Gi
+  storageClassName: ""  
+  efs:
+    fileSystemId: "fs-09fe5d21c0ed2cb4e"
+    path: ""
+    accessPoint: ""   
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+envVars:
+  - name: ENVIRONMENT
+    value: "production"
+  - name: APP_MODE
+    value: "scale-up"
+  - name: LOG_LEVEL
+    value: "info"
+
+volume:
+  name: nginx-data  # Name of the volume (this should match what is used in deployment)
+  mountName: nginx-data  # Name for the mount path (this should match the mount path in deployment)
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+  ingressClassName: nginx
+  hosts:
+    - host: abhi.parveen232.tech
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - abhi.parveen232.tech
+      secretName: hello-world-tls-secrets
+
+certificate:
+  enabled: true
+  namespace: default
+  secretName: hello-world-tls-secret
+  issuerName: letsencrypt-staging
+  issuerKind: ClusterIssuer
+  commonName: abhi.parveen232.tech
+  dnsNames:
+    - abhi.parveen232.tech
+
+clusterIssuer:
+  enabled: true
+  name: letsencrypt-staging
+  email: example@example.com
+  server: https://acme-staging-v02.api.letsencrypt.org/directory
+  privateKeySecretName: example-issuer-account-key
+  ingressClass: nginx
+
