@@ -20,21 +20,25 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 80
-        volumeMounts:
-        - name: {{ .Values.volume.mountName }}  # Dynamically set mount name
-          mountPath: /usr/share/nginx/html
         env:
-        {{- if .Values.envVars }}
-        {{- toYaml .Values.envVars | nindent 8 }}
-        {{- end }}
-        resources:  # Place `resources` under the container definition
+          {{- if .Values.envVars }}
+          {{- toYaml .Values.envVars | nindent 8 }}
+          {{- end }}
+        resources:
           requests:
             memory: {{ .Values.resources.requests.memory }}
             cpu: {{ .Values.resources.requests.cpu }}
           limits:
             memory: {{ .Values.resources.limits.memory }}
             cpu: {{ .Values.resources.limits.cpu }}
+        volumeMounts:
+          {{- range .Values.persistence.volumes }}
+          - mountPath: /usr/share/nginx/html/{{ .name }}
+            name: {{ .name }}-pvc
+          {{- end }}
       volumes:
-      - name: {{ .Values.volume.name }}  # Dynamically set volume name
-        persistentVolumeClaim:
-          claimName: {{ .Release.Name }}-nginx-pvc  # Link to your PVC
+        {{- range .Values.persistence.volumes }}
+        - name: {{ .name }}-pvc
+          persistentVolumeClaim:
+            claimName: {{ .name }}-pvc
+        {{- end }}
