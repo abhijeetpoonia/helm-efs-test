@@ -70,7 +70,7 @@ certificate:
     - abhi.parveen232.tech
 
 clusterIssuer:
-  enabled: true
+  enabled: false
   name: letsencrypt-staging
   email: example@example.com
   server: https://acme-staging-v02.api.letsencrypt.org/directory

@@ -34,11 +34,11 @@ spec:
         volumeMounts:
           {{- range .Values.persistence.volumes }}
           - mountPath: /usr/share/nginx/html/{{ .name }}
-            name: {{ .name }}-pvc
+            name: {{ .name }}-pvc-my-nginx1
           {{- end }}
       volumes:
         {{- range .Values.persistence.volumes }}
-        - name: {{ .name }}-pvc
+        - name: {{ .name }}-pvc-my-nginx1
           persistentVolumeClaim:
-            claimName: {{ .name }}-pvc
+            claimName: {{ .name }}-pvc-my-nginx1
         {{- end }}
