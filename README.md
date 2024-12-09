@@ -47,6 +47,10 @@ Helm 3
     ```sh
    helm install my-nginx . --namespace default
     ```
+8. Unstall a chart
+    ```sh
+    helm uninstall my-nginx1 -n default
+     ```
 
 
 
