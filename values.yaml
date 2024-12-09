@@ -39,6 +39,11 @@ envVars:
   - name: LOG_LEVEL
     value: "info"
 
+labels:
+  app: nginx-app
+  instance: {{ .Release.Name }}
+  component: web
+
 volume:
   name: nginx-data
   mountName: nginx-data
