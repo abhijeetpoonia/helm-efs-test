@@ -1,18 +1,21 @@
+{{- range .Values.persistence.volumes }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Release.Name }}-nginx-pv
+  name: {{ .name }}
 spec:
   capacity:
-    storage: {{ .Values.persistence.size }}
+    storage: {{ $.Values.persistence.size }}
   accessModes:
-    - {{ .Values.persistence.accessMode }}
+    - {{ $.Values.persistence.accessMode }}
   persistentVolumeReclaimPolicy: Retain
   volumeMode: Filesystem
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: {{ .Values.persistence.efs.fileSystemId }}
+    volumeHandle: {{ .fileSystemId }}
     volumeAttributes:
-      path: {{ .Values.persistence.efs.path }}
+      path: {{ .path }}
     readOnly: false
-  storageClassName: {{ .Values.persistence.storageClassName | quote }}
+  storageClassName: {{ $.Values.persistence.storageClassName | quote }}
+---
+{{- end }}
