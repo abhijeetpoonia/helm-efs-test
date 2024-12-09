@@ -41,7 +41,7 @@ envVars:
 
 labels:
   app: nginx-app
-  instance: {{ .Release.Name }}
+  instance: my-nginx-instance
   component: web
 
 volume:
