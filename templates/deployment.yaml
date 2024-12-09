@@ -3,16 +3,22 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-nginx
   labels:
-    app: {{ .Release.Name }}-nginx
+    app: {{ .Values.labels.app }}
+    instance: {{ .Values.labels.instance }}
+    component: {{ .Values.labels.component }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-nginx
+      app: {{ .Values.labels.app }}
+      instance: {{ .Values.labels.instance }}
+      component: {{ .Values.labels.component }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-nginx
+        app: {{ .Values.labels.app }}
+        instance: {{ .Values.labels.instance }}
+        component: {{ .Values.labels.component }}
     spec:
       containers:
       - name: nginx
