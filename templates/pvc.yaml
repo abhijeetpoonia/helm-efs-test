@@ -1,11 +1,15 @@
+{{- range .Values.persistence.volumes }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Release.Name }}-nginx-pvc
+  name: {{ .name }}-pvc
 spec:
   accessModes:
-    - {{ .Values.persistence.accessMode }}
+    - {{ $.Values.persistence.accessMode }}
   resources:
     requests:
-      storage: {{ .Values.persistence.size }}
-  storageClassName: {{ .Values.persistence.storageClassName | quote }}
+      storage: {{ $.Values.persistence.size }}
+  storageClassName: {{ $.Values.persistence.storageClassName | quote }}
+  volumeName: {{ .name }}
+---
+{{- end }}
