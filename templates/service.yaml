@@ -1,15 +1,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "..fullname" . }}
+  name: {{ .Release.Name }}-nginx
   labels:
-    {{- include "..labels" . | nindent 4 }}
+    app: {{ .Values.labels.app }}
+    instance: {{ .Values.labels.instance }}
+    component: {{ .Values.labels.component }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: 80
       protocol: TCP
       name: http
   selector:
-    {{- include "..selectorLabels" . | nindent 4 }}
+    app: {{ .Values.labels.app }}
+    instance: {{ .Values.labels.instance }}
+    component: {{ .Values.labels.component }}
