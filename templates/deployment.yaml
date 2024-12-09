@@ -12,7 +12,6 @@ spec:
     matchLabels:
       app: {{ .Values.labels.app }}
       instance: {{ .Values.labels.instance }}
-      component: {{ .Values.labels.component }}
   template:
     metadata:
       labels:
