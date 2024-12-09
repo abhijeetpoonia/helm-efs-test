@@ -14,11 +14,14 @@ persistence:
   enabled: true
   accessMode: ReadWriteMany
   size: 1Gi
-  storageClassName: ""   
-  volumeType: "efs"      
-  efs:
-    fileSystemId: "fs-08101e4d2fb646b97"
-    path: /
+  storageClassName: ""
+  volumes:
+    - name: efs-volume-1
+      fileSystemId: "fs-07d2586db24714e3a"
+      path: /
+    - name: efs-volume-2
+      fileSystemId: "fs-038c433329e4db034"
+      path: /
 
 resources:
   requests:
